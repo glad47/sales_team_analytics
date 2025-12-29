@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add Analytics Account field to Sales Team form -->
+    <record id="crm_team_view_form_inherit_analytics" model="ir.ui.view">
+        <field name="name">crm.team.form.inherit.analytics</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="analytic_account_id" 
+                       placeholder="Select Analytics Account..."
+                       options="{'no_create': True, 'no_open': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add Analytics Account column to Sales Team list -->
+    <record id="crm_team_view_tree_inherit_analytics" model="ir.ui.view">
+        <field name="name">crm.team.tree.inherit.analytics</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="analytic_account_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add to Sales Team Kanban view -->
+    <record id="crm_team_view_kanban_inherit_analytics" model="ir.ui.view">
+        <field name="name">crm.team.kanban.inherit.analytics</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_kanban_primary_bottom')]" position="inside">
+                <div t-if="record.analytic_account_id.value" class="text-muted">
+                    <i class="fa fa-line-chart" title="Analytics Account"/>
+                    <field name="analytic_account_id"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
