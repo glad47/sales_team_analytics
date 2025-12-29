@@ -69,7 +69,7 @@ class AccountMove(models.Model):
         return super(AccountMove, self)._post(soft=soft)
     
     def _apply_team_analytics_account(self):
-        """Apply analytics account from sales team to invoice lines"""
+        """Apply analytics account from sales team to invoice lines (excluding receivable/payable)"""
         self.ensure_one()
         
         if not self.source_team_id or not self.source_team_id.analytic_account_id:
@@ -79,11 +79,15 @@ class AccountMove(models.Model):
         analytic_account = self.source_team_id.analytic_account_id
         lines_updated = 0
         
-        for line in self.invoice_line_ids.filtered(
-            lambda l: not l.exclude_from_invoice_tab and l.display_type == 'product'
+        # Apply to ALL invoice lines (line_ids) not just invoice_line_ids
+        # BUT exclude receivable/payable accounts
+        for line in self.line_ids.filtered(
+            lambda l: l.account_id.account_type not in (
+                'asset_receivable', 
+                'liability_payable'
+            ) and l.display_type not in ('line_section', 'line_note')
         ):
             # Only update if line doesn't already have an analytics account
-            # Remove this condition to force override
             if not line.analytic_distribution:
                 line.analytic_distribution = {
                     str(analytic_account.id): 100
@@ -91,7 +95,7 @@ class AccountMove(models.Model):
                 lines_updated += 1
                 _logger.info(
                     f"Applied analytics account {analytic_account.name} "
-                    f"to line {line.name}"
+                    f"to line {line.name} (Account: {line.account_id.code})"
                 )
         
         if lines_updated > 0:
@@ -114,7 +118,8 @@ class AccountMoveLine(models.Model):
                 line.move_id.source_team_id and 
                 line.move_id.source_team_id.analytic_account_id and
                 not line.analytic_distribution and
-                line.display_type == 'product'):
+                line.account_id.account_type not in ('asset_receivable', 'liability_payable') and
+                line.display_type not in ('line_section', 'line_note')):
                 
                 analytic_account = line.move_id.source_team_id.analytic_account_id
                 line.analytic_distribution = {
@@ -122,7 +127,7 @@ class AccountMoveLine(models.Model):
                 }
                 _logger.info(
                     f"Applied analytics account on line creation: "
-                    f"{analytic_account.name}"
+                    f"{analytic_account.name} (Account: {line.account_id.code})"
                 )
         
         return lines
