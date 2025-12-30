@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
- <data>
     <!-- Add Analytics Account field to Sales Team form -->
     <record id="crm_team_view_form_inherit_analytics" model="ir.ui.view">
         <field name="name">crm.team.form.inherit.analytics</field>
         <field name="model">crm.team</field>
         <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
         <field name="arch" type="xml">
+            <!-- Add after user_id field in the left group -->
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="analytic_account_id" 
                        placeholder="Select Analytic Account..."
                        options="{'no_create': True, 'no_open': True}"/>
             </xpath>
+            
+            <!-- Add location fields in a new group -->
+            <xpath expr="//group[@name='right']" position="after">
+                <group string="Receipt Settings" name="receipt_settings">
+                    <field name="receipt_location" 
+                           placeholder="e.g., الرحاب - شارع التحلية (الامير محمد)"/>
+                    <field name="receipt_location_detail" 
+                           placeholder="e.g., الرحاب - جدة - 1669  , مكة 192 , المملكة العربية السعودية"/>
+                </group>
+            </xpath>
         </field>
     </record>
-    </data>
+
+    <!-- Add Analytics Account column to Sales Team list -->
+    <!-- <record id="crm_team_view_tree_inherit_analytics" model="ir.ui.view">
+        <field name="name">crm.team.tree.inherit.analytics</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="analytic_account_id" optional="show"/>
+            </xpath>
+        </field>
+    </record> -->
 </odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+        
+        <!-- Replace first location line -->
+        <xpath expr="//div[contains(text(), 'الرحاب - شارع التحلية')]" position="replace">
+            <div style="font-size:5pt;line-height:1; text-align:center; font-family:droidarabickufiregular !important;margin-bottom:0pt;margin-top:7pt;">
+                <t t-if="receipt.receipt_location" t-esc="receipt.receipt_location"/>
+                <t t-else="">الرحاب - شارع التحلية (الامير xxxxx)</t>
+            </div>
+        </xpath>
+        
+        <!-- Replace second location line -->
+        <xpath expr="//div[contains(text(), 'الرحاب - جدة - 1669')]" position="replace">
+            <div style="font-size:5pt;line-height:1; text-align:center; font-family:droidarabickufiregular !important;margin-bottom:0pt;margin-top:3pt;">
+                <t t-if="receipt.receipt_location_detail" t-esc="receipt.receipt_location_detail"/>
+                <t t-else="">الرحاب - جدة - 1669  , مكة 192 , المملكة العربية السعودية</t>
+            </div>
+        </xpath>
+        
+    </t>
+
+</templates>

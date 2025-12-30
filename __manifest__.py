@@ -31,8 +31,8 @@ Technical:
 * Uses analytic_distribution format
 * Hooks into invoice posting process
     """,
-    'author': 'Your Company',
-    'website': 'https://www.yourcompany.com',
+    'author': 'Glad Dema',
+    'website': 'https://www.gladdema.com',
     'license': 'LGPL-3',
     'depends': [
         'base',
@@ -41,13 +41,21 @@ Technical:
         'account',
         'point_of_sale',
         'analytic',
+        'stylish_pos_receipts',  
     ],
     'data': [
         'views/crm_team_views.xml',
         'views/account_move_views.xml',
     ],
+    'assets': {
+        'point_of_sale.assets': [
+            'sales_team_analytics/static/src/js/models.js',
+            'sales_team_analytics/static/src/xml/pos_receipt.xml',  # Will load AFTER stylish_pos_receipts
+        ],
+    },
     'images': [],
     'installable': True,
     'application': False,
     'auto_install': False,
 }
+
