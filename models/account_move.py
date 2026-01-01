@@ -13,7 +13,7 @@ class AccountMove(models.Model):
         'crm.team',
         string='Source Sales Team',
         compute='_compute_source_team_id',
-        store=True,
+        store=False,
         help='Sales team from the source document (SO or POS)'
     )
     
