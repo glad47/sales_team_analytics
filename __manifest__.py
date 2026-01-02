@@ -44,7 +44,6 @@ Technical:
     ],
     'data': [
         'views/crm_team_views.xml',
-        'views/account_move_views.xml',
     ],
     'assets': {
         'point_of_sale.assets': [
