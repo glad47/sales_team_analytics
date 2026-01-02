@@ -38,7 +38,6 @@ Technical:
         'base',
         'crm',
         'sale',
-        'account',
         'point_of_sale',
         'analytic',
         'stylish_pos_receipts',  
